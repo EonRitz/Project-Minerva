@@ -89,17 +89,22 @@ def jokes():
 
 def weather():
     import requests
+    from bs4 import BeautifulSoup
+
     speak("Which city, do you want to know the weather of?")
     city = takeCommand()
+
     url = f'https://wttr.in/{city.replace(" ", "+")}?format=%C+%t+%w'
 
     response = requests.get(url)
 
     if response.status_code == 200:
-        data = response.text.splitlines()
-        for line in data:
-            speak(line)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        weather_info = soup.get_text()
+        print(f"Weather in {city}: {weather_info}")
+        speak(f"Weather in {city}: {weather_info}")
     else:
+        print(f"Failed to fetch weather data. Status code: {response.status_code}")
         speak(f"Failed to fetch weather data. Status code: {response.status_code}")
 
 

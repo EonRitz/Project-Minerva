@@ -5,12 +5,18 @@ import wikipedia # pip install wikipedia
 import smtplib
 import webbrowser as wb
 import os
+import pyautogui # pip install pyautogui
+import psutil # pip install psutil
+import pyjokes # pip install pyjokes
+
+# Defining the Voice Engine used
 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 desired_voice = voices[3]
 engine.setProperty('voice', desired_voice.id)
 
+# Functions of Minerva AI Assistant
 
 def speak(audio):
     engine.say(audio)
@@ -28,7 +34,7 @@ def date():
     day = int(datetime.datetime.now().day)
     speak(f"Today is {month} {day} in the year {year}.")
 
-def wishme():
+def greetings():
     hour = datetime.datetime.now().hour
     if hour >= 6 and hour <12:
         hour_of_day = "morning"
@@ -68,9 +74,39 @@ def sendmail(to, content):
     server.sendmail('r.chichirita@gmail.com', to, content)
     server.close()
 
+def screenshot():
+    img = pyautogui.screenshot()
+    img.save("screenshot\ss.png")
+
+def cpu():
+    usage = str(psutil.cpu_percent())
+    speak(f'CPU is at {usage} percentage')
+    battery = psutil.sensors_battery()
+    speak(f'and the Battery is at {battery.percent} percent.')
+
+def jokes():
+    speak(pyjokes.get_joke())
+
+def weather():
+    import requests
+    speak("Which city, do you want to know the weather of?")
+    city = takeCommand()
+    url = f'https://wttr.in/{city.replace(" ", "+")}?format=%C+%t+%w'
+
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.text.splitlines()
+        for line in data:
+            speak(line)
+    else:
+        speak(f"Failed to fetch weather data. Status code: {response.status_code}")
+
+
+# Main body of Minerva AI Assistant
 
 if __name__ == "__main__":
-    wishme()
+    greetings()
     while True:
         query = takeCommand().lower()
 
@@ -113,6 +149,31 @@ if __name__ == "__main__":
             songs_dir = 'C:\\Music\Science Fiction'
             songs = os.listdir(songs_dir)
             os.startfile(os.path.join(songs_dir, songs[0]))
+
+        elif 'remember' in query:
+            speak("What should I remember?")
+            data = takeCommand()
+            speak("You said, to remeber that..." + data)
+            remember = open('data.txt', 'w')
+            remember.write(data)
+            remember.close()
+        
+        elif 'do you know anything' in query:
+            remember = open('data.txt', 'r')
+            speak("You said, to remember that..." + remember.read())
+
+        elif 'screenshot' in query:
+            screenshot()
+            speak("Screenshot taken!")
+        
+        elif 'cpu' in query:
+            cpu()
+
+        elif 'joke' in query:
+            jokes()
+
+        elif 'weather' in query:
+            weather()
 
         elif 'offline' in query:
             quit()

@@ -3,7 +3,8 @@ import datetime
 import speech_recognition as sr # pip install SpeechRecognition
 import wikipedia # pip install wikipedia
 import smtplib
-import webbrowser as wb 
+import webbrowser as wb
+import os
 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
@@ -95,12 +96,23 @@ if __name__ == "__main__":
                 print(e)
                 speak("Unable to end the email")
 
-        elif 'search in chrome' in query:
+        elif 'open in chrome' in query:
             speak("What should I search for?")
-            chromepath = '"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"'
+            chromepath = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
             search = takeCommand().lower()
-            wb.get(chromepath).open_new_tab(search + '.com')
+            wb.get(chromepath).open_new_tab(search+'.com')
 
+        elif 'logout' in query:
+            os.system("shutdown -1")
+        elif 'shutdown' in query:
+            os.system("shutdown /s /t 1")
+        elif 'restart' in query:
+            os.system("shutdown /r /t 1")
+
+        elif 'play songs' in query:
+            songs_dir = 'C:\\Music\Science Fiction'
+            songs = os.listdir(songs_dir)
+            os.startfile(os.path.join(songs_dir, songs[0]))
 
         elif 'offline' in query:
             quit()

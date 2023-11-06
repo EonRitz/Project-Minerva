@@ -53,7 +53,8 @@ def takeCommand():
     r = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
-        r.pause_threshold = 1.5
+        speak("I am listening...")
+        r.pause_threshold = 1
         audio = r.listen(source)
     
     try:
@@ -151,7 +152,7 @@ if __name__ == "__main__":
             os.system("shutdown /r /t 1")
 
         elif 'play songs' in query:
-            songs_dir = 'C:\\Music\Science Fiction'
+            songs_dir = 'music/'
             songs = os.listdir(songs_dir)
             os.startfile(os.path.join(songs_dir, songs[0]))
 

@@ -5,7 +5,7 @@ import wikipedia # pip install wikipedia
 import smtplib
 import webbrowser as wb
 import os
-import pyautogui # pip install pyautogui
+#import pyautogui # pip install pyautogui
 import psutil # pip install psutil
 import pyjokes # pip install pyjokes
 
@@ -75,9 +75,9 @@ def sendmail(to, content):
     server.sendmail('r.chichirita@gmail.com', to, content)
     server.close()
 
-def screenshot():
-    img = pyautogui.screenshot()
-    img.save("screenshot\ss.png")
+# def screenshot():
+    # img = pyautogui.screenshot()
+    # img.save("screenshot\ss.png")
 
 def cpu():
     usage = str(psutil.cpu_percent())
